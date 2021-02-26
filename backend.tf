@@ -1,9 +1,9 @@
 terraform {
   required_version = ">=0.12.0"
   backend "s3" {
-    region  = "ca-central-1"
+    region  = "us-east-1"
     profile = "default"
     key     = "terraformstatefile"
-    bucket  = "coppertree-analytics-terraform-state-bucket"
+    bucket  = "la-training-feb2021-terraform"
   }
 }

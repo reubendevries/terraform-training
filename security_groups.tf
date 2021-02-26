@@ -45,17 +45,17 @@ resource "aws_security_group" "jenkins-sg" {
   }
   ingress {
     description     = "allow anyone on port 8080"
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = var.webserver-port
+    to_port         = var.webserver-port
     protocol        = "tcp"
     security_groups = [aws_security_group.lb-sg.id]
   }
   ingress {
-    description = "allow traffic from us-east-1"
+    description = "allow traffic from us-west-2"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.20.1.0/24"]
+    cidr_blocks = ["192.168.1.0/24"]
   }
   egress {
     description = "Allow all outgoing traffic"
@@ -67,10 +67,10 @@ resource "aws_security_group" "jenkins-sg" {
 }
 
 #Create SG for allowing TCP/22 from your IP in us-east-2
-resource "aws_security_group" "jenkins-sg-virgina" {
+resource "aws_security_group" "jenkins-sg-oregon" {
   provider = aws.region-worker
-  name     = "jenkins-sg-virgina"
-  vpc_id   = aws_vpc.vpc_master_virgina.id
+  name     = "jenkins-sg-oregon"
+  vpc_id   = aws_vpc.vpc_master_oregon.id
   ingress {
     description = "Allow 22 from our Internal network"
     from_port   = 22
@@ -79,11 +79,11 @@ resource "aws_security_group" "jenkins-sg-virgina" {
     cidr_blocks = [var.external-ip]
   }
   ingress {
-    description = "allow traffic from ca-central-1"
+    description = "allow traffic from us-east-1"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["10.10.1.0/24"]
+    cidr_blocks = ["10.0.1.0/24"]
   }
   egress {
     description = "Allow all outgoing traffic"
