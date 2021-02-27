@@ -1,4 +1,4 @@
-#Create a VPC in ca-central-1
+#Create a VPC in us-east-1
 resource "aws_vpc" "vpc_master" {
   provider             = aws.region-master
   cidr_block           = "10.0.0.0/16"
@@ -9,7 +9,7 @@ resource "aws_vpc" "vpc_master" {
   }
 }
 
-#Create a VPC in us-east-1
+#Create a VPC in us-west-2
 resource "aws_vpc" "vpc_master_oregon" {
   provider             = aws.region-worker
   cidr_block           = "192.168.0.0/16"
@@ -20,13 +20,13 @@ resource "aws_vpc" "vpc_master_oregon" {
   }
 }
 
-#Create IGW in ca-central-1
+#Create IGW in us-east-1
 resource "aws_internet_gateway" "igw" {
   provider = aws.region-master
   vpc_id   = aws_vpc.vpc_master.id
 }
 
-#Create IGW in us-east-1
+#Create IGW in us-west-2
 resource "aws_internet_gateway" "igw-oregon" {
   provider = aws.region-worker
   vpc_id   = aws_vpc.vpc_master_oregon.id
@@ -76,7 +76,7 @@ resource "aws_vpc_peering_connection_accepter" "accept_peering" {
   auto_accept               = true
 }
 
-#Create routing table in us-west-2
+#Create routing table in us-east-1
 resource "aws_route_table" "internet_route" {
   provider = aws.region-master
   vpc_id   = aws_vpc.vpc_master.id
@@ -112,7 +112,7 @@ resource "aws_route_table" "internet_route_oregon" {
     gateway_id = aws_internet_gateway.igw-oregon.id
   }
   route {
-    cidr_block                = "192.168.1.0/24"
+    cidr_block                = "10.0.1.0/24"
     vpc_peering_connection_id = aws_vpc_peering_connection.useast1-uswest2.id
   }
   lifecycle {

@@ -28,5 +28,5 @@ variable "webserver-port" {
 }
 variable "dns-name" {
   type    = string
-  default = "<public-hosted-zone-name-ending-with-dot>"
+  default = "cmcloudlab520.info."
 }
